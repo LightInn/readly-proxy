@@ -1,6 +1,4 @@
 import type {NextApiRequest, NextApiResponse} from 'next'
-// @ts-ignore
-import {JSDOM} from "jsdom";
 import {Readability} from "@mozilla/readability";
 
 
@@ -20,15 +18,18 @@ export default async function handler(
         return;
     }
 
-    // @ts-ignore
-    var html = await fetch(new URL(url)).then(response => response.text())
+    const targetUrl = Array.isArray(url) ? url[0] : url;
+    const html = await fetch(new URL(targetUrl)).then(response => response.text())
+
+    // Load jsdom lazily in the API handler to avoid server startup/module interop issues.
+    const {JSDOM} = await import('jsdom');
 
 
-    var doc = new JSDOM(html, {
-        url: url,
+    const doc = new JSDOM(html, {
+        url: targetUrl,
     });
-    let reader = new Readability(doc.window.document);
-    let article = reader.parse();
+    const reader = new Readability(doc.window.document);
+    const article = reader.parse();
 
 
 // return json
