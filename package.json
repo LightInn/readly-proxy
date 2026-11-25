@@ -8,7 +8,7 @@
   },
   "dependencies": {
     "@mozilla/readability": "^0.6.0",
-    "jsdom": "29.1.1",
+    "jsdom": "31.0.1",
     "next": "^16.0.0",
     "react": "19.2.7",
     "react-dom": "19.2.7",
